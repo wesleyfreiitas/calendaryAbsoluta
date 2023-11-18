@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.2/css/bulma.min.css">
+    <title>Reunião: <%= appo.description %></title>
+</head>
+<body>
+
+<section class="section">
+    <div class="container">
+        <h1 class="title">Reunião: <%= appo.description %></h1>
+        <hr>
+
+        <h4 class="subtitle">Lead: <%= appo.name %></h4>
+        <p><strong>Email:</strong> <%= appo.email %></p>
+        <p><strong>Link:</strong> <a href="<%= appo.link %>"><%= appo.link %></a></p>
+
+        <hr>
+
+        <% if (!appo.finished) { %>
+            <form action="/finish" method="post">
+                <input type="hidden" name="id" value="<%= appo._id %>">
+                <button class="button is-danger">Finalizar</button>
+            </form>
+        <% } %>
+    </div>
+</section>
+
+</body>
+</html>

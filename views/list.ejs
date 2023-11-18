@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.2/css/bulma.min.css">
+    <title>Reuniões</title>
+</head>
+<body>
+
+<section class="section">
+    <div class="container">
+        <h3 class="title">Consultas</h3>
+        <hr>
+
+        <form action="/searchresult" method="get" class="field has-addons">
+            <div class="control">
+                <input class="input" type="search" name="search" id="search" placeholder="Digite o e-mail ou o CPF do cliente">
+            </div>
+            <div class="control">
+                <button class="button is-primary">Pesquisar</button>
+            </div>
+        </form>
+
+        <hr>
+
+        <% appos.forEach(appo => { %>
+            <div class="box">
+                <h1 class="title is-4">Reunião: <%= appo.description %> </h1>
+                <h4 class="subtitle is-6">Nome: <%= appo.name %> </h4>
+                <p><strong>Email:</strong> <%= appo.email %> </p>
+                <p><strong>Link:</strong> <%= appo.link %> </p>
+                <hr>
+            </div>
+        <% }) %>
+    </div>
+</section>
+
+</body>
+</html>

@@ -1,0 +1,239 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Absoluta - Calendary</title>
+    <link rel="stylesheet" href="main.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+
+
+    <!-- <link rel="stylesheet" href="calendario.css"> -->
+    <!-- Crie um arquivo CSS para o estilo do calendário -->
+    <script src="main.js"></script>
+    <style>
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            background-color: #f0f0f0;
+            /* Cor de fundo da página */
+        }
+
+        .meu-input-personalizado {
+            display: inline-block;
+            padding: 0.5em;
+            margin: 0.3em;
+            width: 100%;
+            box-sizing: border-box;
+            border: 1px solid #ccc;
+            /* Cor da borda */
+            border-radius: 4px;
+            /* Cantos arredondados */
+            transition: border-color 0.3s ease-in-out;
+        }
+
+        .meu-input-personalizado:focus {
+            border-color: #3273dc;
+            /* Cor da borda ao receber foco */
+        }
+
+        .destaque-div {
+            background: linear-gradient(to bottom, #D7FF85, #D7FF85);
+            padding: 20px;
+            margin: 0 auto;
+            color: #000;
+        }
+
+        .meu-botao-personalizado {
+            display: inline-block;
+            padding: 0.5em 1em;
+            margin: 0.3em;
+            text-decoration: none;
+            background-color: #3273dc;
+            /* Cor de fundo azul */
+            color: #fff;
+            /* Cor do texto branco */
+            border: 1px solid #3273dc;
+            /* Cor da borda igual à cor de fundo */
+            border-radius: 4px;
+            /* Cantos arredondados */
+            transition: background-color 0.3s ease-in-out, color 0.3s ease-in-out;
+        }
+
+        .meu-botao-personalizado:hover {
+            background-color: #2762c2;
+            /* Altere a cor de fundo ao passar o mouse */
+            color: #fff;
+            /* Altere a cor do texto ao passar o mouse */
+        }
+
+        .container {
+            display: flex;
+            background-color: #fff;
+            /* Cor de fundo da div retangular */
+            border: 1px solid #ccc;
+            /* Borda da div retangular */
+            border-radius: 10px;
+            width: 80%;
+            /* Largura da div retangular */
+        }
+
+        .calendario {
+            flex: 1;
+            /* Ocupa metade da largura da div retangular */
+            /* Estilize o calendário aqui */
+            padding: 20px;
+        }
+
+        .informacoes {
+            flex: 1;
+            /* Ocupa metade da largura da div retangular */
+            text-align: center;
+            padding: 20px;
+        }
+
+        h3 {
+            font-size: 1.5em;
+            margin-bottom: 10px;
+        }
+
+        .relogio-icon {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .relogio-icon img {
+            width: 30px;
+            height: 30px;
+            margin-right: 5px;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <div class="calendario">
+            <div class="destaque-div">
+                <div id="calendar"></div>
+            </div>
+        </div>
+        <div class="informacoes">
+            <h3>Wesley Freitas Calendary</h3>
+            <div class="relogio-icon">
+                <span><i class="fa-solid fa-clock"></i>30 min</span>
+            </div><br>
+            <div id="schedule">
+                <!-- Os botões serão adicionados aqui dinamicamente -->
+            </div><br>
+            <form method="POST" action="create">
+                <input type="text" name="name" id="name" placeholder="Nome" class="meu-input-personalizado">
+                <input type="email" name="email" id="email" placeholder="email@email.com"
+                    class="meu-input-personalizado">
+                <input type="date" name="date" id="date" class="meu-input-personalizado" placeholder="12/02/2089">
+                <!-- Adiciona o campo oculto para armazenar a hora selecionada -->
+                <input type="hidden" name="time" id="time">
+                <button class="meu-botao-personalizado" type="submit">Agendar</button>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        // Função para gerar horários com incremento de meia em meia hora
+        function gerarHorarios(inicio, fim, incremento) {
+            let horarios = [];
+            let atual = inicio;
+
+            while (atual <= fim) {
+                horarios.push(atual);
+                atual = adicionarMeiaHora(atual, incremento);
+            }
+
+            return horarios;
+        }
+
+        // Função auxiliar para adicionar meia hora a um horário
+        function adicionarMeiaHora(horario, incremento) {
+            let [horas, minutos] = horario.split(':');
+            minutos = parseInt(minutos, 10) + incremento;
+
+            if (minutos >= 60) {
+                horas = parseInt(horas, 10) + Math.floor(minutos / 60);
+                minutos %= 60;
+            }
+
+            // Formatação para manter o formato HH:MM
+            horas = horas.toString().padStart(2, '0');
+            minutos = minutos.toString().padStart(2, '0');
+
+            return `${horas}:${minutos}`;
+        }
+
+        // Parâmetros iniciais
+        const inicio = '08:00';
+        const fim = '18:00';
+        const incremento = 30; // Meia hora
+
+        // Gerar array de horários
+        const horarios = gerarHorarios(inicio, fim, incremento);
+
+        // Exibir o array de horários
+        console.log(horarios);
+
+        var currentDate = new Date();
+        // Obter a hora atual
+        var hour = currentDate.getHours();
+
+        // Verificar se é de manhã ou tarde
+        var periodDay = (hour >= 12) ? 'Afternoon' : 'Morning';
+
+        // Exibir o resultado
+        console.log('is ' + periodDay);
+
+        document.addEventListener('DOMContentLoaded', function () {
+            // Encontre a div com o id "schedule"
+            const scheduleDiv = document.getElementById('schedule');
+
+            // Verifique se a div foi encontrada
+            if (scheduleDiv) {
+                // Itere sobre os horários e adicione botões ao div "schedule"
+                for (let i = (periodDay === 'Morning') ? 0 : 11; i <= ((periodDay === 'Morning') ? 7 :
+                        20); i++) {
+                    const novoBotao = document.createElement('button');
+                    novoBotao.classList.add('meu-botao-personalizado');
+                    novoBotao.textContent = horarios[i];
+
+                    // Adiciona um evento de clique que atualiza o valor do campo oculto
+                    novoBotao.addEventListener('click', function () {
+                        document.getElementById('time').value = horarios[i];
+                    });
+
+                    scheduleDiv.appendChild(novoBotao);
+                }
+            } else {
+                console.error('Div com id "schedule" não encontrada.');
+            }
+        });
+    </script>
+
+    <script>
+        var element = document.getElementById("calendar");
+        var calendar = new FullCalendar.Calendar(element, {
+            initialView: 'dayGridMonth',
+            locale: 'pt-br',
+            events: 'getcalendar',
+            eventClick: function (info) {
+                window.location.href = '/event/' + info.event.id;
+            }
+        });
+
+        calendar.render();
+    </script>
+
+</body>
+
+</html>

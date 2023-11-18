@@ -1,0 +1,58 @@
+body {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    margin: 0;
+    background-color: #f0f0f0;
+    /* Cor de fundo da página */
+}
+
+.destaque-div {
+    background: linear-gradient(to bottom, #D7FF85, #D7FF85);
+    padding: 20px;
+    margin: 0 auto;
+    color: #000;
+}
+
+.container {
+    display: flex;
+    background-color: #fff;
+    /* Cor de fundo da div retangular */
+    border: 1px solid #ccc;
+    /* Borda da div retangular */
+    border-radius: 10px;
+    width: 80%;
+    /* Largura da div retangular */
+}
+
+.calendario {
+    flex: 1;
+    /* Ocupa metade da largura da div retangular */
+    /* Estilize o calendário aqui */
+    padding: 20px;
+}
+
+.informacoes {
+    flex: 1;
+    /* Ocupa metade da largura da div retangular */
+    text-align: center;
+    padding: 20px;
+}
+
+h3 {
+    font-size: 1.5em;
+    margin-bottom: 10px;
+}
+
+.relogio-icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.relogio-icon img {
+    width: 30px;
+    height: 30px;
+    margin-right: 5px;
+}
