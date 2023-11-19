@@ -7,6 +7,8 @@
     <title>Absoluta - Calendary</title>
     <link rel="stylesheet" href="main.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+    <link rel="stylesheet" href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+
 
 
     <!-- <link rel="stylesheet" href="calendario.css"> -->
@@ -20,6 +22,7 @@
             height: 100vh;
             margin: 0;
             background-color: #f0f0f0;
+            min-height: 100vh;
             /* Cor de fundo da página */
         }
 
@@ -78,8 +81,13 @@
             border: 1px solid #ccc;
             /* Borda da div retangular */
             border-radius: 10px;
-            width: 80%;
+            width: 100%;
             /* Largura da div retangular */
+
+            flex-wrap: wrap;
+            justify-content: center;
+            max-width: 1200px;
+            /* ou qualquer valor desejado */
         }
 
         .calendario {
@@ -112,6 +120,29 @@
             height: 30px;
             margin-right: 5px;
         }
+
+        .calendario,
+        .informacoes {
+            flex: 1;
+            padding: 20px;
+            box-sizing: border-box;
+        }
+
+        @media only screen and (max-width: 768px) {
+
+            .container {
+                margin-top: 345px;
+                /* Adicione o espaçamento superior desejado */
+            }
+            .calendario,
+            .informacoes {
+                width: 100%;
+            }
+
+        }
+    </style>
+    <style>
+
     </style>
 </head>
 
@@ -134,14 +165,34 @@
                 <input type="text" name="name" id="name" placeholder="Nome" class="meu-input-personalizado">
                 <input type="email" name="email" id="email" placeholder="email@email.com"
                     class="meu-input-personalizado">
-                <input type="date" name="date" id="date" class="meu-input-personalizado" placeholder="12/02/2089">
+                <!-- <input type="text" name="date" id="date" class="meu-input-personalizado" placeholder="12/02/2089"> -->
+                <input type="text" name="date" id="date" class="meu-input-personalizado"
+                    placeholder="Selecione uma data">
                 <!-- Adiciona o campo oculto para armazenar a hora selecionada -->
                 <input type="hidden" name="time" id="time">
                 <button class="meu-botao-personalizado" type="submit">Agendar</button>
             </form>
         </div>
     </div>
+    <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+    <script>
+        $(document).ready(function () {
+            $("#date").datepicker({
+                minDate: 0, // Impede datas anteriores à data atual
+                maxDate: '+7d', // Permite datas até 7 dias no futuro
+                beforeShowDay: function (date) {
+                    var day = date.getDay();
 
+                    // Permite apenas dias úteis (não permite sábado nem domingo)
+                    return [day !== 0 && day !== 6, ''];
+                },
+                dateFormat: "yy-mm-dd", // Formato da data
+                showOtherMonths: true,
+                selectOtherMonths: true
+            });
+        });
+    </script>
     <script>
         // Função para gerar horários com incremento de meia em meia hora
         function gerarHorarios(inicio, fim, incremento) {
@@ -228,7 +279,8 @@
             events: 'getcalendar',
             eventClick: function (info) {
                 window.location.href = '/event/' + info.event.id;
-            }
+            },
+            height: 'auto'
         });
 
         calendar.render();

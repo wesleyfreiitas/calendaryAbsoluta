@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Data Atual</title>
+    <link rel="stylesheet" href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #f7f7f7;
+            margin: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+        }
+
+        .meu-input-personalizado {
+            font-size: 16px;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            margin: 10px;
+            width: 200px;
+            outline: none;
+            transition: border-color 0.3s;
+        }
+
+        .meu-input-personalizado:focus {
+            border-color: #007bff;
+        }
+
+        .ui-datepicker {
+            font-size: 14px;
+            width: 250px;
+            margin-top: 10px;
+            background-color: #fff;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+        }
+
+        .ui-datepicker-header {
+            background-color: #007bff;
+            color: #fff;
+            border: 1px solid #0056b3;
+            border-radius: 5px 5px 0 0;
+        }
+
+        .ui-datepicker-title select {
+            color: #007bff;
+        }
+
+        .ui-datepicker-prev, .ui-datepicker-next {
+            background-color: #0056b3;
+            border: 1px solid #004080;
+            border-radius: 3px;
+        }
+
+        .ui-datepicker-prev:hover, .ui-datepicker-next:hover {
+            background-color: #004080;
+        }
+
+        .ui-datepicker-calendar th {
+            background-color: #007bff;
+            color: #fff;
+        }
+
+        .ui-datepicker-calendar td {
+            border: 1px solid #ddd;
+        }
+
+        .ui-datepicker-calendar a {
+            color: #007bff;
+        }
+
+        .ui-datepicker-calendar a:hover {
+            background-color: #007bff;
+            color: #fff;
+        }
+    </style>
+</head>
+<body>
+    <input type="text" name="date" id="date" class="meu-input-personalizado" placeholder="Selecione uma data">
+
+    <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+    <script>
+        $(document).ready(function() {
+            $("#date").datepicker({
+                minDate: 0, // Impede datas anteriores à data atual
+                maxDate: '+7d', // Permite datas até 7 dias no futuro
+                beforeShowDay: function(date) {
+                    var day = date.getDay();
+                    
+                    // Permite apenas dias úteis (não permite sábado nem domingo)
+                    return [day !== 0 && day !== 6, ''];
+                },
+                dateFormat: "dd/mm/yy", // Formato da data
+                showOtherMonths: true,
+                selectOtherMonths: true
+            });
+        });
+    </script>
+</body>
+</html>
