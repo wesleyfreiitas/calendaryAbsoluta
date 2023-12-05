@@ -1,6 +1,7 @@
 const mongoose = require("mongoose");
 
 const appointment = new mongoose.Schema({
+    orner: String,
     name: String,
     email: String,
     description: String,

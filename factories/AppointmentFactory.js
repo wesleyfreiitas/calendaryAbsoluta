@@ -11,10 +11,11 @@ class AppointmentFactory{
         var startDate = new Date(year,month,day,hour,minutes,0,0);
         
         var appo = {
+            orner:simpleAppointment.orner,
             id: simpleAppointment._id,
-            title: simpleAppointment.name + " - " + simpleAppointment.description, 
+            title: simpleAppointment.name,
+            // title: simpleAppointment.name + " - " + simpleAppointment.description, 
             start: startDate,
-            end: startDate,
             notified: simpleAppointment.notified,
             email: simpleAppointment.email
         }

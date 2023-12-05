@@ -27,7 +27,15 @@ mongoose.set('useFindAndModify', false);
 app.get("/", (req, res) => {
     res.render("index");
 });
+app.post("/getAvailableTimes", async (req, res) => {
+    const selectedDate = req.body.selectedDate;
+    const owner = req.body.owner;
 
+    // Adicione lógica para consultar os horários disponíveis para o owner na data selecionada
+    const availableTimes = await AppointmentService.getAvailableTimes(selectedDate, owner);
+
+    res.json(availableTimes);
+});
 
 app.post("/create", async (req, res) => {
     var {
@@ -46,6 +54,7 @@ app.post("/create", async (req, res) => {
     var {link} = data;
 
     var status = await appointmentService.Create(
+        req.body.orner,
         req.body.name,
         req.body.email,
         req.body.date,

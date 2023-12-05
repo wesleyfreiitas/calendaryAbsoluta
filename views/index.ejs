@@ -104,6 +104,12 @@
             padding: 20px;
         }
 
+        .selecionado {
+            background-color: #fff;
+            color: #3273dc;
+            border: 1px solid #3273dc;
+        }
+
         h3 {
             font-size: 1.5em;
             margin-bottom: 10px;
@@ -134,15 +140,13 @@
                 margin-top: 345px;
                 /* Adicione o espaçamento superior desejado */
             }
+
             .calendario,
             .informacoes {
                 width: 100%;
             }
 
         }
-    </style>
-    <style>
-
     </style>
 </head>
 
@@ -162,14 +166,16 @@
                 <!-- Os botões serão adicionados aqui dinamicamente -->
             </div><br>
             <form method="POST" action="create">
+                <input type="hidden" name="selectedDate" id="selectedDate" class="meu-input-personalizado">
                 <input type="text" name="name" id="name" placeholder="Nome" class="meu-input-personalizado">
                 <input type="email" name="email" id="email" placeholder="email@email.com"
                     class="meu-input-personalizado">
                 <!-- <input type="text" name="date" id="date" class="meu-input-personalizado" placeholder="12/02/2089"> -->
-                <input type="text" name="date" id="date" class="meu-input-personalizado"
+                <input type="hidden" name="date" id="date" class="meu-input-personalizado"
                     placeholder="Selecione uma data">
                 <!-- Adiciona o campo oculto para armazenar a hora selecionada -->
                 <input type="hidden" name="time" id="time">
+                <input type="hidden" name="orner" id="orner" value="wesleydefreiitas01@gmail.com">
                 <button class="meu-botao-personalizado" type="submit">Agendar</button>
             </form>
         </div>
@@ -177,101 +183,53 @@
     <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
     <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
     <script>
-        $(document).ready(function () {
-            $("#date").datepicker({
-                minDate: 0, // Impede datas anteriores à data atual
-                maxDate: '+7d', // Permite datas até 7 dias no futuro
-                beforeShowDay: function (date) {
-                    var day = date.getDay();
+        document.addEventListener('DOMContentLoaded', function () {
 
-                    // Permite apenas dias úteis (não permite sábado nem domingo)
-                    return [day !== 0 && day !== 6, ''];
-                },
-                dateFormat: "yy-mm-dd", // Formato da data
-                showOtherMonths: true,
-                selectOtherMonths: true
-            });
-        });
-    </script>
-    <script>
-        // Função para gerar horários com incremento de meia em meia hora
-        function gerarHorarios(inicio, fim, incremento) {
-            let horarios = [];
-            let atual = inicio;
+            // Função para gerar horários com incremento de meia em meia hora
+            // function gerarHorarios(inicio, fim, incremento) {
+            //     let horarios = [];
+            //     let atual = inicio;
 
-            while (atual <= fim) {
-                horarios.push(atual);
-                atual = adicionarMeiaHora(atual, incremento);
-            }
+            //     while (atual <= fim) {
+            //         horarios.push(atual);
+            //         atual = adicionarMeiaHora(atual, incremento);
+            //     }
 
-            return horarios;
-        }
+            //     return horarios;
+            // }
 
-        // Função auxiliar para adicionar meia hora a um horário
-        function adicionarMeiaHora(horario, incremento) {
-            let [horas, minutos] = horario.split(':');
-            minutos = parseInt(minutos, 10) + incremento;
+            // Função auxiliar para adicionar meia hora a um horário
+            // function adicionarMeiaHora(horario, incremento) {
+            //     let [horas, minutos] = horario.split(':');
+            //     minutos = parseInt(minutos, 10) + incremento;
 
-            if (minutos >= 60) {
-                horas = parseInt(horas, 10) + Math.floor(minutos / 60);
-                minutos %= 60;
-            }
+            //     if (minutos >= 60) {
+            //         horas = parseInt(horas, 10) + Math.floor(minutos / 60);
+            //         minutos %= 60;
+            //     }
 
             // Formatação para manter o formato HH:MM
-            horas = horas.toString().padStart(2, '0');
-            minutos = minutos.toString().padStart(2, '0');
+            //     horas = horas.toString().padStart(2, '0');
+            //     minutos = minutos.toString().padStart(2, '0');
 
-            return `${horas}:${minutos}`;
-        }
+            //     return `${horas}:${minutos}`;
+            // }
 
-        // Parâmetros iniciais
-        const inicio = '08:00';
-        const fim = '18:00';
-        const incremento = 30; // Meia hora
+            // Parâmetros iniciais
+            // const inicio = '08:00';
+            // const fim = '18:00';
+            // const incremento = 30; // Meia hora
 
-        // Gerar array de horários
-        const horarios = gerarHorarios(inicio, fim, incremento);
+            // Gerar array de horários
+            // const horarios = gerarHorarios(inicio, fim, incremento);
 
-        // Exibir o array de horários
-        console.log(horarios);
+            // Exibir o array de horários
+            // console.log(horarios);
+            // const horarios = ['00:00', '01:00', '02:00', '03:00', '04:00', '05:00', '06:00', '07:00', '08:00', '09:00', '10:00', '11:00', '12:00', '13:00', '14:00', '15:00', '16:00', '17:00', '18:00', '19:00', '20:00', '21:00', '22:00', '23:00']
 
-        var currentDate = new Date();
-        // Obter a hora atual
-        var hour = currentDate.getHours();
 
-        // Verificar se é de manhã ou tarde
-        var periodDay = (hour >= 12) ? 'Afternoon' : 'Morning';
-
-        // Exibir o resultado
-        console.log('is ' + periodDay);
-
-        document.addEventListener('DOMContentLoaded', function () {
-            // Encontre a div com o id "schedule"
-            const scheduleDiv = document.getElementById('schedule');
-
-            // Verifique se a div foi encontrada
-            if (scheduleDiv) {
-                // Itere sobre os horários e adicione botões ao div "schedule"
-                for (let i = (periodDay === 'Morning') ? 0 : 11; i <= ((periodDay === 'Morning') ? 7 :
-                        20); i++) {
-                    const novoBotao = document.createElement('button');
-                    novoBotao.classList.add('meu-botao-personalizado');
-                    novoBotao.textContent = horarios[i];
-
-                    // Adiciona um evento de clique que atualiza o valor do campo oculto
-                    novoBotao.addEventListener('click', function () {
-                        document.getElementById('time').value = horarios[i];
-                    });
-
-                    scheduleDiv.appendChild(novoBotao);
-                }
-            } else {
-                console.error('Div com id "schedule" não encontrada.');
-            }
         });
-    </script>
 
-    <script>
         var element = document.getElementById("calendar");
         var calendar = new FullCalendar.Calendar(element, {
             initialView: 'dayGridMonth',
@@ -279,13 +237,91 @@
             events: 'getcalendar',
             eventClick: function (info) {
                 window.location.href = '/event/' + info.event.id;
+                document.getElementById('date').value = info.dateStr;
             },
-            height: 'auto'
+            height: 'auto',
+            unselectAuto: false,
+            selectAllow: function (selectInfo) {
+                // Verifica se o dia selecionado é sábado ou domingo
+                var day = selectInfo.start.getDay();
+                return day !== 0 && day !== 6; // Retorna true se não for sábado ou domingo
+            },
+            selectable: true,
+            select: function (selectionInfo) {
+                // Adiciona a data selecionada ao campo de entrada 'date'
+                const selectedDate = new Date(selectionInfo.startStr);
+                const today = new Date();
+                // Converte ambas as datas para strings no formato 'YYYY-MM-DD'
+            var selectedDateString = selectedDate.toISOString().split('T')[0];
+            var todayDateString = today.toISOString().split('T')[0];
+
+            // Verifica se a data selecionada é retroativa
+            if (selectedDateString < todayDateString) {
+                console.log('Data selecionada:', selectedDateString);
+                console.log('Data de hoje:', todayDateString);
+                alert('Por favor, selecione uma data futura.');
+                calendar.unselect(); // Desfaz a seleção da data
+
+                
+                } else {
+                    document.getElementById('date').value = selectionInfo.startStr;
+                    // Faça uma requisição AJAX para obter os horários disponíveis
+                    $.post('/getAvailableTimes', { selectedDate, owner: 'wesleydefreiitas01@gmail.com' }, function (horarios) {
+                        console.log('Horários disponíveis:', horarios);
+
+                        // Limpa a div de horários antes de adicionar os novos horários
+                        $('#schedule').empty();
+
+                        const scheduleDiv = document.getElementById('schedule');
+
+                        if (scheduleDiv) {
+                            // Obter a hora atual
+                            const currentDate = new Date();
+                            const hour = currentDate.getHours();
+
+                            // Verificar se é de manhã ou tarde
+                            const periodDay = (hour >= 12) ? 'Afternoon' : 'Morning';
+
+                            // Filtrar os horários disponíveis com base no período do dia
+                            const horariosFiltrados = horarios.filter(function (horario) {
+                                const hora = parseInt(horario.split(':')[0]);
+
+                                if (periodDay === 'Morning' && hora < 12) {
+                                    return true; // Horários da manhã
+                                } else if (periodDay === 'Afternoon' && hora >= 12) {
+                                    return true; // Horários da tarde
+                                }
+
+                                return false;
+                            });
+
+                            // Iterar sobre os horários disponíveis filtrados
+                            horariosFiltrados.forEach(function (horario) {
+                                const novoBotao = document.createElement('button');
+                                novoBotao.classList.add('meu-botao-personalizado');
+                                novoBotao.textContent = horario;
+
+                                novoBotao.addEventListener('click', function () {
+                                    const botoes = document.querySelectorAll('.meu-botao-personalizado');
+                                    botoes.forEach(b => b.classList.remove('selecionado'));
+                                    novoBotao.classList.add('selecionado');
+                                    document.getElementById('time').value = horario;
+                                });
+
+                                scheduleDiv.appendChild(novoBotao);
+                            });
+                        } else {
+                            console.error('Div com id "schedule" não encontrada.');
+                        }
+                    });
+
+                }
+            }
         });
 
         calendar.render();
-    </script>
 
+    </script>
 </body>
 
 </html>

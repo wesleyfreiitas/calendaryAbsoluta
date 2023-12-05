@@ -6,8 +6,53 @@ var mailer = require("nodemailer");
 const Appo = mongoose.model("Appointment", appointment);
 
 class AppointmentService {
-    async Create(name, email, date, time, link) {
+    async getAvailableTimes(selectedDate, owner) {
+        // Adicione lógica para consultar no banco de dados os horários disponíveis
+        // para o owner na data selecionada
+        // Exemplo: Consultar todos os horários não ocupados para o owner na data selecionada
+        const occupiedTimes = await Appo.find({
+            orner: owner,
+            date: new Date(selectedDate),
+            finished: false
+        }).select('time');
+    
+        // Array de todos os horários possíveis com intervalo de 30 minutos
+        const allTimes = Array.from({ length: 18 }, (_, i) => {
+            let hour, minute;
+    
+            if (i < 12) {
+                // Manhã: 8:00 - 11:30
+                hour = Math.floor(i / 2) + 8;
+                minute = i % 2 === 0 ? '00' : '30';
+            } else {
+                // Tarde: 13:00 - 17:30
+                hour = Math.floor((i - 9) / 2) + 13;
+                minute = (i - 9) % 2 === 0 ? '00' : '30';
+            }
+    
+            return `${String(hour).padStart(2, '0')}:${minute}`;
+        });
+    
+        // Use um conjunto (Set) para garantir a unicidade dos horários
+        const uniqueTimes = new Set(allTimes);
+    
+        // Se houver horários ocupados, remova esses horários do conjunto
+        occupiedTimes.forEach(occupied => {
+            uniqueTimes.delete(occupied.time);
+        });
+    
+        // Converta o conjunto de volta para um array
+        const horarios = Array.from(uniqueTimes);
+    
+        console.log(horarios);
+        return horarios;
+    }
+    
+
+    async Create(orner, name, email, date, time, link) {
+        console.log(date)
         var newAppo = new Appo({
+            orner,
             name,
             email,
             date,
